@@ -9,7 +9,6 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -24,8 +23,8 @@ public class JdbcTimeEntryRepository implements TimeEntryRepository {
   private final JdbcTemplate jdbcTemplate;
 
   @Autowired
-  public JdbcTimeEntryRepository(DataSource dataSource) {
-    this.jdbcTemplate = new JdbcTemplate(dataSource);
+  public JdbcTimeEntryRepository(JdbcTemplate jdbcTemplate) {
+    this.jdbcTemplate = jdbcTemplate;
   }
 
   @Override

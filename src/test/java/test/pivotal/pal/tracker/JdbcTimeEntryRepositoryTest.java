@@ -1,11 +1,13 @@
 package test.pivotal.pal.tracker;
 
-import com.mysql.cj.jdbc.MysqlDataSource;
-import io.pivotal.pal.tracker.JdbcTimeEntryRepository;
+import io.pivotal.pal.tracker.PalTrackerApplication;
 import io.pivotal.pal.tracker.TimeEntry;
 import io.pivotal.pal.tracker.TimeEntryRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.Date;
@@ -16,22 +18,23 @@ import java.util.TimeZone;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SpringBootTest(classes = PalTrackerApplication.class)
 public class JdbcTimeEntryRepositoryTest {
 
+  @Autowired
   private TimeEntryRepository subject;
+
+  @Autowired
   private JdbcTemplate jdbcTemplate;
 
   @BeforeEach
   public void setUp() {
-    MysqlDataSource dataSource = new MysqlDataSource();
-    dataSource.setUrl(System.getenv("SPRING_DATASOURCE_URL"));
-
-    subject = new JdbcTimeEntryRepository(dataSource);
-
-    jdbcTemplate = new JdbcTemplate(dataSource);
-    jdbcTemplate.execute("DELETE FROM time_entries");
-
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+  }
+
+  @AfterEach
+  public void teardown() {
+    jdbcTemplate.execute("DELETE FROM time_entries");
   }
 
   @Test
