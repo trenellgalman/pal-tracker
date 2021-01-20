@@ -19,6 +19,9 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-jdbc')
     implementation('mysql:mysql-connector-java')
 
+    implementation('org.springframework.data:spring-data-r2dbc')
+    implementation('dev.miku:r2dbc-mysql')
+
     testImplementation('org.springframework.boot:spring-boot-starter-test')
 }
 
