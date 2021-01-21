@@ -3,6 +3,7 @@ import org.flywaydb.gradle.task.FlywayMigrateTask
 plugins {
     id('org.springframework.boot') version('2.4.0')
     id('io.spring.dependency-management') version('1.0.10.RELEASE')
+    id('io.reflectoring.spring-boot-devtools') version('0.0.2')
     id('org.flywaydb.flyway') version('7.3.0')
     id('java')
 }
@@ -19,6 +20,10 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-jdbc')
     implementation('mysql:mysql-connector-java')
 
+    implementation('org.springframework.boot:spring-boot-starter-actuator')
+
+
+
     testImplementation('org.springframework.boot:spring-boot-starter-test')
 }
 
@@ -30,12 +35,18 @@ def developmentDbUrl = 'jdbc:mysql://localhost:3306/tracker_dev?user=tracker&use
 bootRun.environment([
         "WELCOME_MESSAGE": "howdy",
         "SPRING_DATASOURCE_URL": developmentDbUrl,
+        "MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE": "*",
+        "MANAGEMENT_ENDPOINT_HEALTH_SHOWDETAILS": "always",
+        "MANAGEMENT_HEALTH_PROBES_ENABLED": true,
 ])
 
 def testDbUrl = 'jdbc:mysql://localhost:3306/tracker_test?user=tracker&useSSL=false&useTimezone=UTC&useLegacyDatetimeCode=false'
 test.environment([
         "WELCOME_MESSAGE": "Hello from test",
         "SPRING_DATASOURCE_URL": testDbUrl,
+        "MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE": "*",
+        "MANAGEMENT_ENDPOINT_HEALTH_SHOWDETAILS": "always",
+        "MANAGEMENT_HEALTH_PROBES_ENABLED": true,
 ])
 
 flyway {
@@ -47,4 +58,8 @@ flyway {
 
 task testMigrate(type: FlywayMigrateTask) {
     url = testDbUrl
+}
+
+springBoot {
+    buildInfo()
 }
