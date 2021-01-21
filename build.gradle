@@ -20,9 +20,11 @@ dependencies {
     implementation('mysql:mysql-connector-java')
 
     implementation('org.springframework.data:spring-data-r2dbc')
+    implementation("io.r2dbc:r2dbc-pool")
     implementation('dev.miku:r2dbc-mysql')
 
     testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation('io.projectreactor:reactor-test')
 }
 
 test {
@@ -30,15 +32,21 @@ test {
 }
 
 def developmentDbUrl = 'jdbc:mysql://localhost:3306/tracker_dev?user=tracker&useSSL=false&useTimezone=UTC&useLegacyDatetimeCode=false'
+def developmentR2dbcUrl = 'r2dbc:pool:mysql://localhost:3306/tracker_dev?useTimezone=UTC&useLegacyDatetimeCode=false'
 bootRun.environment([
         "WELCOME_MESSAGE": "howdy",
         "SPRING_DATASOURCE_URL": developmentDbUrl,
+        "R2DBC_DATASOURCE_URL": developmentR2dbcUrl,
+        "R2DBC_USER": 'tracker',
 ])
 
 def testDbUrl = 'jdbc:mysql://localhost:3306/tracker_test?user=tracker&useSSL=false&useTimezone=UTC&useLegacyDatetimeCode=false'
+def testR2dbcUrl = 'r2dbc:pool:mysql://localhost:3306/tracker_test?useTimezone=UTC&useLegacyDatetimeCode=false'
 test.environment([
         "WELCOME_MESSAGE": "Hello from test",
         "SPRING_DATASOURCE_URL": testDbUrl,
+        "R2DBC_DATASOURCE_URL": testR2dbcUrl,
+        "R2DBC_USER": 'tracker',
 ])
 
 flyway {
