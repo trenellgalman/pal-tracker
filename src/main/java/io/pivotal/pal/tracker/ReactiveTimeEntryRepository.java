@@ -13,5 +13,5 @@ public interface ReactiveTimeEntryRepository {
 
   Mono<TimeEntry> update(long id, TimeEntry timeEntry);
 
-  Mono<Void> delete(long id);
+  Mono<Integer> delete(long id);
 }

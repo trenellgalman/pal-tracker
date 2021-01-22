@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -18,6 +19,7 @@ import java.util.TimeZone;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Transactional
 @SpringBootTest(classes = PalTrackerApplication.class)
 public class JdbcTimeEntryRepositoryTest {
 
@@ -29,12 +31,8 @@ public class JdbcTimeEntryRepositoryTest {
 
   @BeforeEach
   public void setUp() {
-    TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-  }
-
-  @AfterEach
-  public void teardown() {
     jdbcTemplate.execute("DELETE FROM time_entries");
+    TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
   }
 
   @Test

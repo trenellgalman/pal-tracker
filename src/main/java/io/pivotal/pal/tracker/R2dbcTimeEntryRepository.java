@@ -55,7 +55,7 @@ public class R2dbcTimeEntryRepository implements ReactiveTimeEntryRepository {
   }
 
   @Override
-  public Mono<Void> delete(long id) {
-    return template.delete(query(where("id").is(id))).then();
+  public Mono<Integer> delete(long id) {
+    return template.delete(TimeEntry.class).matching(query(where("id").is(id))).all();
   }
 }
